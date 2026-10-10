@@ -1,22 +1,34 @@
 # LibreChat API
 
-A production-ready starter API for a LibreChat ecosystem with:
+A feature-rich, universal API starter for LibreChat and internet-powered workflows. It provides:
 
-- user authentication and JWT sessions
-- chat message endpoints
-- external API integrations
-- web fetch and search endpoints
-- AI orchestration endpoint for internet tasks
-- modular, extendable Express + TypeScript setup
+- Universal third-party API client integration
+- Chat/message backend with auth
+- Web fetch and search APIs
+- AI provider orchestration for major model vendors
+- User management and extensible service layer
+- Ready structure for production scaling
+
+## Included AI providers
+
+This starter supports the most common AI model families:
+
+- OpenAI: GPT-4o, GPT-4o Mini, GPT-4.1 Mini, o3-mini
+- Anthropic: Claude 3.5/3.7/Opus
+- Google Gemini: Gemini 1.5 Flash/Pro, Gemini 2.0 Flash
+- DeepSeek: DeepSeek Chat and Reasoner
+- Groq: Llama, Mixtral, Gemma
+- Mistral: Large, Codestral, Nemo
+- OpenRouter: Multi-provider routing hub across major LLMs
 
 ## Features
 
-- Universal API client wrapper for third-party services
-- Structured integration registry for social, news, weather, and search APIs
-- Chat persistence in memory with room to add Postgres/SQLite/Prisma later
-- Search engine access using DuckDuckGo Instant Answer API
-- Fetch webpage data and summarize titles/snippets
-- AI planning endpoint for orchestrating multi-step actions
+- JWT-based auth and user sessions
+- Chat message creation and retrieval
+- External API registry and health checks
+- Web fetching and search integration
+- AI model provider discovery and runtime chat provider abstraction
+- In-memory demo persistence for fast iteration
 
 ## Quick start
 
@@ -26,23 +38,18 @@ A production-ready starter API for a LibreChat ecosystem with:
 npm install
 ```
 
-2. Copy the environment file:
+2. Copy environment variables:
 
 ```bash
 cp .env.example .env
 ```
 
-3. Start the server in development mode:
+3. Add your API keys if you want live AI calls.
+
+4. Start the app:
 
 ```bash
 npm run dev
-```
-
-4. Or build and run:
-
-```bash
-npm run build
-npm start
 ```
 
 ## Default admin user
@@ -50,7 +57,7 @@ npm start
 - Email: `admin@librechat.local`
 - Password: `admin123`
 
-## API summary
+## Main endpoints
 
 ### Auth
 
@@ -75,29 +82,27 @@ npm start
 - `GET /api/v1/web/fetch?url=https://example.com`
 - `GET /api/v1/web/search?q=weather+lagos`
 
-### AI orchestration
+### AI
 
+- `GET /api/v1/ai/providers`
+- `GET /api/v1/ai/models?provider=openai`
+- `POST /api/v1/ai/chat`
 - `POST /api/v1/ai/orchestrate`
 
-Example payload:
-
-```json
-{
-  "task": "Research recent AI trends",
-  "goal": "Find the latest info",
-  "url": "https://example.com",
-  "provider": "duckduckgo"
-}
-```
-
-## Example curl request
+### Example AI request
 
 ```bash
-curl -X POST http://localhost:4000/api/v1/auth/login \
+curl -X POST http://localhost:4000/api/v1/ai/chat \
   -H 'Content-Type: application/json' \
-  -d '{"email":"admin@librechat.local","password":"admin123"}'
+  -H 'Authorization: Bearer YOUR_TOKEN' \
+  -d '{
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "messages": [{"role": "user", "content": "Give me a short summary of modern AI trends"}],
+    "temperature": 0.7
+  }'
 ```
 
 ## Notes
 
-This is intentionally designed as a strong starter implementation. The in-memory store is perfect for demos and rapid iteration, and the code structure is ready for a database-backed version using Prisma or Postgres when you are ready to scale.
+This is a powerful starter scaffold. It supports broad model access via provider-specific HTTP requests and is designed for extension with Postgres, Prisma, Redis, and real agent orchestration later.

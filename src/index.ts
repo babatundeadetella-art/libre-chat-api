@@ -13,13 +13,27 @@ const app = express();
 seedDefaultData();
 
 app.use(cors());
-app.use(express.json({ limit: '2mb' }));
+app.use(express.json({ limit: '10mb' }));
 
 app.get('/health', (_req, res) => {
   res.json({
     app: config.appName,
     status: 'ok',
     timestamp: new Date().toISOString(),
+  });
+});
+
+app.get('/', (_req, res) => {
+  res.json({
+    app: config.appName,
+    message: 'LibreChat universal API ready',
+    endpoints: {
+      auth: '/api/v1/auth',
+      chat: '/api/v1/chat',
+      integrations: '/api/v1/integrations',
+      web: '/api/v1/web',
+      ai: '/api/v1/ai',
+    },
   });
 });
 
